@@ -1,6 +1,6 @@
 [
 {
-  "modid": "HidePlayers",
+  "modid": "hideplayers",
   "name": "Hide Players",
   "description": "A Forge mod made for only rendering certain players in Hypixel Housing.\n\u00a7b/hideplayers help for help.",
   "version": "${version}",
