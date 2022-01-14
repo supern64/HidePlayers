@@ -6,10 +6,11 @@ import me.sad.hideplayers.utils.ConfigUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ public class RenderPlayersCommand extends CommandBase {
     private void toggleRenderer(ICommandSender sender) {
         HidePlayers.toggled = !HidePlayers.toggled;
         if (HidePlayers.toggled) {
-            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7aON\u00a7r!"));
+            sender.sendMessage(new TextComponentString(HidePlayers.prefix + "Toggled rendering players \u00a7aON\u00a7r!"));
         } else {
-            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7cOFF\u00a7r!"));
+            sender.sendMessage(new TextComponentString(HidePlayers.prefix + "Toggled rendering players \u00a7cOFF\u00a7r!"));
         }
         try {
             ConfigUtils.writeConfig();
@@ -37,29 +38,29 @@ public class RenderPlayersCommand extends CommandBase {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "hideplayers";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/hideplayers (toggle/help/list/add/remove) [player]";
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List<String> getAliases() {
         return Collections.singletonList("hp");
     }
 
     @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, "toggle", "help", "list", "add", "remove");
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
                 return getListOfStringsMatchingLastWord(args, HidePlayers.players);
             } else if (args[0].equalsIgnoreCase("add")) {
-                NetHandlerPlayClient connection = Minecraft.getMinecraft().getNetHandler();
+                NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
                 List<NetworkPlayerInfo> playerInfo = new ArrayList(connection.getPlayerInfoMap());
                 List<String> playerList = Lists.newArrayList();
                 for (NetworkPlayerInfo networkPlayerInfo : playerInfo) {
@@ -73,7 +74,7 @@ public class RenderPlayersCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
         if (args.length == 0) toggleRenderer(sender);
         else {
             switch (args[0].toLowerCase()) {
@@ -81,20 +82,20 @@ public class RenderPlayersCommand extends CommandBase {
                     toggleRenderer(sender);
                     break;
                 case "help":
-                    sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + getCommandUsage(sender)));
+                    sender.sendMessage(new TextComponentString(HidePlayers.prefix + getUsage(sender)));
                     break;
                 case "list":
-                    sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + HidePlayers.players.toString().substring(1, HidePlayers.players.toString().length() - 1)));
+                    sender.sendMessage(new TextComponentString(HidePlayers.prefix + HidePlayers.players.toString().substring(1, HidePlayers.players.toString().length() - 1)));
                     break;
                 case "add":
                     if (args.length == 1) {
-                        sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + getCommandUsage(sender)));
+                        sender.sendMessage(new TextComponentString(HidePlayers.prefix + getUsage(sender)));
                     } else {
                         if (HidePlayers.players.contains(args[1].toLowerCase())) {
-                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f is already in the list!"));
+                            sender.sendMessage(new TextComponentString(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f is already in the list!"));
                         } else {
                             HidePlayers.players.add(args[1].toLowerCase());
-                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f has been added to the list!"));
+                            sender.sendMessage(new TextComponentString(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f has been added to the list!"));
                             try {
                                 ConfigUtils.writeConfig();
                             } catch (IOException e) {
@@ -105,13 +106,13 @@ public class RenderPlayersCommand extends CommandBase {
                     break;
                 case "remove":
                     if (args.length == 1) {
-                        sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + getCommandUsage(sender)));
+                        sender.sendMessage(new TextComponentString(HidePlayers.prefix + getUsage(sender)));
                     } else {
                         if (!HidePlayers.players.contains(args[1].toLowerCase())) {
-                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f is not in the list!"));
+                            sender.sendMessage(new TextComponentString(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f is not in the list!"));
                         } else {
                             HidePlayers.players.remove(args[1].toLowerCase());
-                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f has been removed from the list!"));
+                            sender.sendMessage(new TextComponentString(HidePlayers.prefix + "\u00a7b" + args[1] + "\u00a7f has been removed from the list!"));
                             try {
                                 ConfigUtils.writeConfig();
                             } catch (IOException e) {
