@@ -26,7 +26,7 @@ public abstract class MixinRenderManager {
         NetHandlerPlayClient connection = minecraft.getNetHandler();
 
         if (entityIn instanceof EntityOtherPlayerMP && !HidePlayers.toggled) {
-            if (entityIn.getName().matches("^[a-zA-Z0-9_]*$") && !HidePlayers.players.contains(entityIn.getName().toLowerCase())) {
+            if (entityIn.getName().matches("^[a-zA-Z0-9_]*$") && entityIn.getUniqueID().version() != 2 && !HidePlayers.players.contains(entityIn.getName().toLowerCase())) { // hypixel marks npc uuids as v2
                 cir.setReturnValue(false);
             }
         }
