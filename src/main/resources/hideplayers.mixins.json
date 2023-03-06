@@ -2,7 +2,7 @@
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "package": "me.sad.hideplayers.mixins",
-  "refmap": "mixin.refmap.json",
+  "refmap": "HidePlayers-refmap.json",
   "mixins": ["MixinRenderManager"],
   "client": [],
   "server": []

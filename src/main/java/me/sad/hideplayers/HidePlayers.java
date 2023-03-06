@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Mod(modid = HidePlayers.MOD_ID)
+@Mod(modid = HidePlayers.MOD_ID, version = "2.0.0")
 public class HidePlayers {
     public static String prefix = "\u00a75HidePlayers \u00a7c- \u00a7r";
     public static final String MOD_ID = "hideplayers";
