@@ -18,20 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class RenderPlayersCommand extends CommandBase {
-    private void toggleRenderer(ICommandSender sender) {
-        HidePlayers.toggled = !HidePlayers.toggled;
-        if (HidePlayers.toggled) {
-            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7aON\u00a7r!"));
-        } else {
-            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7cOFF\u00a7r!"));
-        }
-        try {
-            ConfigUtils.writeConfig();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int getRequiredPermissionLevel() {
         return 0;
@@ -79,11 +65,11 @@ public class RenderPlayersCommand extends CommandBase {
         processCommand(sender, args);
     }
     public void processCommand(ICommandSender sender, String[] args) {
-        if (args.length == 0) toggleRenderer(sender);
+        if (args.length == 0) HidePlayers.toggleRenderer(sender);
         else {
             switch (args[0].toLowerCase()) {
                 case "toggle":
-                    toggleRenderer(sender);
+                    HidePlayers.toggleRenderer(sender);
                     break;
                 case "help":
                     sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + getCommandUsage(sender)));
