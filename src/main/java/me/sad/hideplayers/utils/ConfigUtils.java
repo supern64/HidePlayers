@@ -17,6 +17,9 @@ public class ConfigUtils {
         if (config.exists()) {
             JsonParser parser = new JsonParser();
             JsonObject jsonObject = (JsonObject) parser.parse(new FileReader("config/hideplayers.json"));
+            HidePlayers.toggled = jsonObject.get("toggled").getAsBoolean();
+            JsonElement mode = jsonObject.get("mode");
+            if (mode != null) HidePlayers.mode = HidePlayers.Mode.valueOf(mode.getAsString());
             for (JsonElement element : jsonObject.getAsJsonArray("players")) {
                 HidePlayers.players.add(element.getAsString());
             }
@@ -29,6 +32,7 @@ public class ConfigUtils {
         JsonWriter writer = new JsonWriter(new FileWriter("config/hideplayers.json"));
         writer.beginObject();
         writer.name("toggled").value(HidePlayers.toggled);
+        writer.name("mode").value(HidePlayers.mode.name());
         writer.name("players");
         writer.beginArray();
         for (String player : HidePlayers.players) {

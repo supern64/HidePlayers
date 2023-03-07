@@ -23,9 +23,14 @@ public class RenderLivingListener {
 
 
         if (entity instanceof EntityOtherPlayerMP && !HidePlayers.toggled) {
-            if (entity.getName().matches("^[a-zA-Z0-9_]*$") && entity.getUniqueID().version() != 2 && !HidePlayers.players.contains(entity.getName().toLowerCase())) { // hypixel marks npc uuids as v2
-                entity.setInvisible(true);
-                event.setCanceled(true);
+            if (entity.getName().matches("^[a-zA-Z0-9_]*$") && entity.getUniqueID().version() != 2) { // hypixel marks npc uuids as v2
+                if (HidePlayers.mode == HidePlayers.Mode.WHITELIST && !HidePlayers.players.contains(entity.getName().toLowerCase())) {
+                    entity.setInvisible(true);
+                    event.setCanceled(true);
+                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.0D) {
+                    entity.setInvisible(true);
+                    event.setCanceled(true);
+                }
             }
         }
         if (entity instanceof EntityArmorStand) {
@@ -41,9 +46,14 @@ public class RenderLivingListener {
                 }
             }
             String armorStandOwner = HidePlayers.armorStandCache.get(entity.getPersistentID());
-            if (armorStandOwner != null && !HidePlayers.players.contains(armorStandOwner.toLowerCase()) && !HidePlayers.toggled) {
-                event.setCanceled(true);
+            if (armorStandOwner != null && !HidePlayers.toggled) {
+                if (HidePlayers.mode == HidePlayers.Mode.WHITELIST && !HidePlayers.players.contains(armorStandOwner.toLowerCase())) {
+                    event.setCanceled(true);
+                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.25D) {
+                    event.setCanceled(true);
+                }
             }
+
         }
     }
     @SubscribeEvent

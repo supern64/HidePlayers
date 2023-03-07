@@ -1,6 +1,7 @@
 package me.sad.hideplayers.commands;
 
 import com.google.common.collect.Lists;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import me.sad.hideplayers.HidePlayers;
 import me.sad.hideplayers.utils.ConfigUtils;
 import net.minecraft.client.Minecraft;
@@ -14,8 +15,10 @@ import net.minecraft.util.ChatComponentText;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RenderPlayersCommand extends CommandBase {
     @Override
@@ -30,7 +33,7 @@ public class RenderPlayersCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/hideplayers (toggle/help/list/add/remove) [player]";
+        return "/hideplayers (toggle/help/list/add/remove/mode) [player/mode]";
     }
 
     @Override
@@ -111,6 +114,23 @@ public class RenderPlayersCommand extends CommandBase {
                         }
                     }
                     break;
+                case "mode":
+                    if (args.length == 1) {
+                        sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Current mode is \u00a7b" + HidePlayers.mode.name() + "\u00a7f!"));
+                    } else {
+                        try {
+                            HidePlayers.mode = HidePlayers.Mode.valueOf(args[1].toUpperCase());
+                            ConfigUtils.writeConfig();
+                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Set mode to \u00a7b" + HidePlayers.mode.name() + "\u00a7f!"));
+                        } catch (IllegalArgumentException ignored) {
+                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Available modes are: \u00a7b" + Arrays.stream(HidePlayers.Mode.values()).map(Enum::name).collect(Collectors.joining("\u00a7f, \u00a7b"))));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                default:
+                    sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + getCommandUsage(sender)));
             }
         }
     }

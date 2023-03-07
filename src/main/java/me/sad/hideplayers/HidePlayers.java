@@ -23,11 +23,16 @@ import java.util.UUID;
 
 @Mod(modid = HidePlayers.MOD_ID, version = "2.0.0")
 public class HidePlayers {
+    public enum Mode {
+        WHITELIST,
+        RADIUS
+    }
     public static String prefix = "\u00a75HidePlayers \u00a7c- \u00a7r";
     public static final String MOD_ID = "hideplayers";
     public static List<String> players = new ArrayList<>();
     public static Map<UUID, String> armorStandCache = new HashMap<>();
     public static boolean toggled = true;
+    public static Mode mode = Mode.WHITELIST;
     public static KeyBinding toggleKey;
 
     @Mod.EventHandler
