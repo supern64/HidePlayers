@@ -1,8 +1,10 @@
 package me.sad.hideplayers;
 
 import me.sad.hideplayers.commands.RenderPlayersCommand;
+import me.sad.hideplayers.listeners.RenderLivingListener;
 import me.sad.hideplayers.utils.ConfigUtils;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
@@ -24,6 +26,7 @@ public class HidePlayers {
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) throws IOException {
         ConfigUtils.getConfig();
+        MinecraftForge.EVENT_BUS.register(new RenderLivingListener());
         ClientCommandHandler.instance.registerCommand(new RenderPlayersCommand());
     }
 }
