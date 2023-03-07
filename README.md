@@ -12,9 +12,15 @@ Place the jar file in your `.minecraft/mods` folder.
 
 ```
 /hideplayers - Toggle rendering players.
+/hideplayers mode [WHITELIST/RADIUS] - Set filtering mode.
+
+- For WHITELIST mode (specific players) 
 /hideplayers add - Add a username to the whitelist.
 /hideplayers remove - Remove a username from the whitelist.
-/hideplayers list - Displays the whitelist.
+/hideplayers list - Display the whitelist.
+
+- For RADIUS mode (players in a radius)
+TBD
 ```
 
 ## Other Stuff Used
