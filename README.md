@@ -4,7 +4,7 @@ HidePlayers is a Minecraft Forge mod made for only rendering certain players in 
 
 ## Installation
 
-Download the latest build from [here]("https://github.com/supern64/HidePlayers/releases).
+Download the latest build from [here](https://github.com/supern64/HidePlayers/releases).
 
 Place the jar file in your `.minecraft/mods` folder.
 
