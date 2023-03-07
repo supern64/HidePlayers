@@ -8,6 +8,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
@@ -51,7 +52,9 @@ public class RenderPlayersCommand extends CommandBase {
         return Collections.singletonList("hp");
     }
 
-    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+        return addTabCompletionOptions(sender, args, pos);
+    }
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, "toggle", "help", "list", "add", "remove");
@@ -72,7 +75,9 @@ public class RenderPlayersCommand extends CommandBase {
         return null;
     }
 
-    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
+        processCommand(sender, args);
+    }
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) toggleRenderer(sender);
         else {

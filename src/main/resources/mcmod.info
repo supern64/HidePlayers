@@ -4,7 +4,7 @@
     "name": "Hide Players",
     "description": "A Forge mod made for only rendering certain players in Hypixel Housing.\n\u00a7b/hideplayers help for help.",
     "version": "${version}",
-    "mcversion": "${mcversion}",
+    "mcversion": "${mcVersionStr}",
     "url": "https://github.com/supern64/HidePlayers",
     "authorList": ["s_a_d", "supern64"]
   }
