@@ -1,5 +1,6 @@
 package me.sad.hideplayers.listeners;
 
+import com.mojang.authlib.GameProfile;
 import me.sad.hideplayers.HidePlayers;
 import me.sad.hideplayers.utils.EntityGetter;
 import net.minecraft.client.Minecraft;
@@ -12,6 +13,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RenderLivingListener {
@@ -21,15 +23,16 @@ public class RenderLivingListener {
         NetHandlerPlayClient connection = minecraft.getNetHandler();
         EntityLivingBase entity = EntityGetter.getRenderEntity(event);
 
-
+        List<String> playerList = connection.getPlayerInfoMap().stream().map(NetworkPlayerInfo::getGameProfile).map(GameProfile::getName).collect(Collectors.toList());
+        // TODO: fix essential's EmulatedPlayerBuilder
         if (entity instanceof EntityOtherPlayerMP && !HidePlayers.toggled) {
-            if (entity.getName().matches("^[a-zA-Z0-9_]*$") && entity.getUniqueID().version() != 2) { // hypixel marks npc uuids as v2
+            if (entity.getName().matches("^[a-zA-Z0-9_]{1,16}$") && entity.getUniqueID().version() != 2) { // hypixel marks npc uuids as v2
                 if (HidePlayers.mode == HidePlayers.Mode.WHITELIST && !HidePlayers.players.contains(entity.getName().toLowerCase())) {
-                    entity.setInvisible(true);
                     event.setCanceled(true);
-                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.0D) {
-                    entity.setInvisible(true);
+                    minecraft.getRenderManager().setRenderShadow(false);
+                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.5D) {
                     event.setCanceled(true);
+                    minecraft.getRenderManager().setRenderShadow(false);
                 }
             }
         }
@@ -37,7 +40,6 @@ public class RenderLivingListener {
             if (!HidePlayers.armorStandCache.containsKey(entity.getPersistentID())) {
                 HidePlayers.armorStandCache.put(entity.getPersistentID(), null);
                 if (entity.hasCustomName() && !entity.getCustomNameTag().toLowerCase().contains(minecraft.thePlayer.getName().toLowerCase())) {
-                    List<String> playerList = connection.getPlayerInfoMap().stream().map(NetworkPlayerInfo::getGameProfile).map(gameProfile -> gameProfile.getName()).collect(Collectors.toList());
                     playerList.forEach(p -> {
                         if (entity.getCustomNameTag().toLowerCase().contains(p.toLowerCase())) {
                             HidePlayers.armorStandCache.put(entity.getPersistentID(), p);
@@ -49,7 +51,7 @@ public class RenderLivingListener {
             if (armorStandOwner != null && !HidePlayers.toggled) {
                 if (HidePlayers.mode == HidePlayers.Mode.WHITELIST && !HidePlayers.players.contains(armorStandOwner.toLowerCase())) {
                     event.setCanceled(true);
-                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.25D) {
+                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.75D) {
                     event.setCanceled(true);
                 }
             }
@@ -58,7 +60,7 @@ public class RenderLivingListener {
     }
     @SubscribeEvent
     public void afterRenderEntity(RenderLivingEvent.Post<EntityLivingBase> event) {
-        EntityLivingBase entity = EntityGetter.getRenderEntity(event);
-        if (entity instanceof EntityOtherPlayerMP) entity.setInvisible(false); // armorstands can do their own thing idgaf
+        Minecraft minecraft = Minecraft.getMinecraft();
+        minecraft.getRenderManager().setRenderShadow(minecraft.gameSettings.entityShadows);
     }
 }
