@@ -6,7 +6,7 @@ plugins {
     id("gg.essential.defaults")
 }
 
-version = "2.0.0"
+version = "2.1.0"
 group = "me.sad.hideplayers"
 
 base.archivesName.set("Hide Players-${platform.mcVersionStr}")

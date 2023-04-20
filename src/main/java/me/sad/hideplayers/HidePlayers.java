@@ -33,6 +33,7 @@ public class HidePlayers {
     public static Map<UUID, String> armorStandCache = new HashMap<>();
     public static boolean toggled = true;
     public static Mode mode = Mode.WHITELIST;
+    public static double range = 4.0D;
     public static KeyBinding toggleKey;
 
     @Mod.EventHandler

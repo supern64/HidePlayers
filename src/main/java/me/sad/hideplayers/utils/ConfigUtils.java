@@ -20,6 +20,8 @@ public class ConfigUtils {
             HidePlayers.toggled = jsonObject.get("toggled").getAsBoolean();
             JsonElement mode = jsonObject.get("mode");
             if (mode != null) HidePlayers.mode = HidePlayers.Mode.valueOf(mode.getAsString());
+            JsonElement range = jsonObject.get("range");
+            if (range != null) HidePlayers.range = range.getAsDouble();
             for (JsonElement element : jsonObject.getAsJsonArray("players")) {
                 HidePlayers.players.add(element.getAsString());
             }
@@ -33,6 +35,7 @@ public class ConfigUtils {
         writer.beginObject();
         writer.name("toggled").value(HidePlayers.toggled);
         writer.name("mode").value(HidePlayers.mode.name());
+        writer.name("range").value(HidePlayers.range);
         writer.name("players");
         writer.beginArray();
         for (String player : HidePlayers.players) {

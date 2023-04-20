@@ -11,6 +11,8 @@ Place the jar file in your `.minecraft/mods` folder.
 ## Usage
 
 ```
+(/hp also works for all of these commands)
+
 /hideplayers - Toggle rendering players.
 /hideplayers mode [WHITELIST/RADIUS] - Set filtering mode.
 
@@ -20,7 +22,13 @@ Place the jar file in your `.minecraft/mods` folder.
 /hideplayers list - Display the whitelist.
 
 - For RADIUS mode (players in a radius)
-TBD
+/hideplayers radius [radius] - Specify the radius to hide players in blocks
+```
+
+## Known Issues
+```
+- Player models in Essential/other mods that have a player appear disappear when using either mode
+  > Fixing it involves using a mixin, which I am NOT going to get into (yet)
 ```
 
 ## Other Stuff Used

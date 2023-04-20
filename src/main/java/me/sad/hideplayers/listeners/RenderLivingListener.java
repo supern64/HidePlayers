@@ -13,7 +13,6 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RenderLivingListener {
@@ -30,7 +29,7 @@ public class RenderLivingListener {
                 if (HidePlayers.mode == HidePlayers.Mode.WHITELIST && !HidePlayers.players.contains(entity.getName().toLowerCase())) {
                     event.setCanceled(true);
                     minecraft.getRenderManager().setRenderShadow(false);
-                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.5D) {
+                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < HidePlayers.range) {
                     event.setCanceled(true);
                     minecraft.getRenderManager().setRenderShadow(false);
                 }
@@ -51,7 +50,7 @@ public class RenderLivingListener {
             if (armorStandOwner != null && !HidePlayers.toggled) {
                 if (HidePlayers.mode == HidePlayers.Mode.WHITELIST && !HidePlayers.players.contains(armorStandOwner.toLowerCase())) {
                     event.setCanceled(true);
-                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < 2.75D) {
+                } else if (HidePlayers.mode == HidePlayers.Mode.RADIUS && minecraft.thePlayer.getDistanceSqToEntity(entity) < HidePlayers.range + 0.25D) {
                     event.setCanceled(true);
                 }
             }

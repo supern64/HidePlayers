@@ -33,7 +33,7 @@ public class RenderPlayersCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/hideplayers (toggle/help/list/add/remove/mode) [player/mode]";
+        return "/hideplayers (toggle/help/list/add/remove/mode/range) [player/mode/range]";
     }
 
     @Override
@@ -125,6 +125,21 @@ public class RenderPlayersCommand extends CommandBase {
                         } catch (IllegalArgumentException ignored) {
                             sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Available modes are: \u00a7b" + Arrays.stream(HidePlayers.Mode.values()).map(Enum::name).collect(Collectors.joining("\u00a7f, \u00a7b"))));
                         } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case "range":
+                    if (args.length == 1) {
+                        sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Current range is \u00a7b" + Math.sqrt(HidePlayers.range) + "\u00a7f blocks!"));
+                    } else {
+                        try {
+                            HidePlayers.range = Math.pow(Double.parseDouble(args[1]), 2);
+                            ConfigUtils.writeConfig();
+                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Set range to \u00a7b" + args[1] + "\u00a7f blocks!"));
+                        } catch (NumberFormatException ignored) {
+                            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Please enter a valid number!"));
+                        }  catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
